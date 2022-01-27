@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo> 
+
+    <record id='customer_action' model='ir.actions.act_window'>
+        <field name="name">Customer</field>
+        <field name="res_model">customer.care</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <menuitem name="Customer Care" id="customer_base_menu" />
+    <menuitem name="Customer" id="customer_menu" 
+    parent="customer_base_menu" action="customer_action"/>
+
+    <record id="customer_view_form" model="ir.ui.view">
+        <field name="name">Customer Form</field>
+        <field name="model">customer.care</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button class="btn-primary" name="add" string="Assign to me" type="object"></button>
+                    <button name="remove" string="Unassign" type="object" state="add"></button>
+                    <button name="show" string="Show all transaction" type="option"></button>
+                    <!-- <button name="print_report" string="Print" type="object"></button> -->
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="phone"/>
+                            <field name="email"/>
+                            <field name="address"/>
+                            <field name="identity"/>
+                        </group>
+                        <group>
+                            <field name="curator"/>
+                            <field name="type"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Imformation" string="Imformation">
+                            <field name="information_line_ids">
+                                <tree editable="button" decoration-success="date >= (context_today() + relativedelta(days=0)).strftime('%Y-%m-%d')"> 
+                                    <field name="date"/>
+                                    <field name="content"/> 
+
+                                </tree>
+                                <form>
+                                    <group>
+                                        
+                                        <field name="date"/>
+                                        <field name="content"/> 
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="customer_view_tree" model="ir.ui.view"> 
+        <field name="name">Customer List</field> 
+        <field name="model">customer.care</field> 
+        <field name="arch" type="xml"> 
+            <tree> 
+                <field name="name" optional="show"/> 
+                <field name="phone" optional="show"/>
+                <field name="email" optional="show"/>
+                <field name="address" optional="show"/>
+                <field name="identity" optional="show"/>
+                <field name="curator" optional="show"/>
+                <field name="type" optional="show"/>
+            </tree> 
+        </field> 
+    </record> 
+
+    <record id="customer_search_view" model="ir.ui.view"> 
+        <field name="name">Customer Search</field> 
+        <field name="model">customer.care</field>
+        <field eval="10" name="priority"></field> 
+        <field name="arch" type="xml"> 
+            <search> 
+                <field name="name"/> 
+                <field name="curator"/> 
+                <group expand='0' string='Group by...'>
+                    <filter string='Curator' name="curator_group" context="{'group_by':'curator'}"/>
+                    <filter string='Type' name="type_group" context="{'group_by':'type'}"/>
+                </group>
+            </search> 
+        </field>
+    </record>
+
+    <record id="view_all_customer_kanban" model="ir.ui.view"> 
+        <field name="model">customer.care</field> 
+        <field name="arch" type="xml"> 
+            <kanban>
+                <field name="name" /> 
+                <templates> 
+                    <t t-name="kanban-box"> 
+                        <div class="oe_kanban_card"> 
+                            <a type="open"> 
+                                <field name="name" /> 
+                            </a> 
+                        </div> 
+                    </t> 
+                </templates>
+            </kanban> 
+        </field> 
+    </record> 
+</odoo>
